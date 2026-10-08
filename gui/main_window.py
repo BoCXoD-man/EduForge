@@ -1,5 +1,5 @@
 """
-Главное окно графического интерфейса CodeMentor.
+Главное окно графического интерфейса EduForge.
 
 Окно позволяет выбрать AI-модель, язык и формат,
 ввести тему и запустить генерацию учебной методички.
@@ -24,7 +24,7 @@ from tools.file_tools import save_markdown
 
 
 class MainWindow(QMainWindow):
-    """Главное окно приложения CodeMentor."""
+    """Главное окно приложения EduForge."""
 
     def __init__(self, api_keys: dict[str, str | None]):
         super().__init__()
@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         self.thread = None
         self.worker = None
 
-        self.setWindowTitle("CodeMentor")
+        self.setWindowTitle("EduForge")
         self.setMinimumSize(600, 450)
 
         self._create_widgets()
@@ -45,38 +45,16 @@ class MainWindow(QMainWindow):
         """Создаёт элементы интерфейса."""
 
         self.model_combo = QComboBox()
-
-        self.model_combo.addItem(
-            "OpenRouter",
-            "openrouter",
-        )
-
-        self.model_combo.addItem(
-            "Gemini",
-            "gemini",
-        )
-
-        self.model_combo.addItem(
-            "ChatGPT (OpenAI)",
-            "openai",
-        )
-
+        self.model_combo.addItem("OpenRouter", "openrouter")
+        self.model_combo.addItem("Gemini", "gemini")
+        self.model_combo.addItem("ChatGPT (OpenAI)", "openai")
 
         self.language_combo = QComboBox()
-        self.language_combo.addItems([
-            "Русский",
-            "English",
-        ])
+        self.language_combo.addItems(["Русский","English",])
 
         self.format_combo = QComboBox()
-        self.format_combo.addItem(
-            "Markdown (.md)",
-            "md",
-        )
-        self.format_combo.addItem(
-            "PDF (.pdf)",
-            "pdf",
-        )
+        self.format_combo.addItem("Markdown (.md)","md",)
+        self.format_combo.addItem("PDF (.pdf)","pdf",)
         self.format_combo.setCurrentIndex(0)
 
         self.topic_input = QLineEdit()

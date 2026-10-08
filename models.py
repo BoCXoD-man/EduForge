@@ -1,5 +1,5 @@
 """
-AI-модели для CodeMentor.
+AI-модели для EduForge.
 
 Файл содержит общий интерфейс AI-модели и реализации
 для OpenAI, Gemini и OpenRouter.
@@ -13,7 +13,7 @@ from openai import OpenAI
 
 
 class BaseModel(ABC):
-    """Базовый интерфейс AI-моделей CodeMentor."""
+    """Базовый интерфейс AI-моделей EduForge."""
 
     def __init__(self, system_prompt: str):
         self.system_prompt = system_prompt
