@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 )
 
 from gui.worker import GenerationWorker
-from tools.file_tools import save_markdown
+from tools.file_tools import save_markdown, save_pdf
 
 
 class MainWindow(QMainWindow):
@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
 
         self.thread = None
         self.worker = None
+        self.current_format = None
 
         self.setWindowTitle("EduForge")
         self.setMinimumSize(600, 450)
@@ -50,12 +51,11 @@ class MainWindow(QMainWindow):
         self.model_combo.addItem("ChatGPT (OpenAI)", "openai")
 
         self.language_combo = QComboBox()
-        self.language_combo.addItems(["Русский","English",])
+        self.language_combo.addItems(["Русский", "English"])
 
         self.format_combo = QComboBox()
-        self.format_combo.addItem("Markdown (.md)","md",)
-        self.format_combo.addItem("PDF (.pdf)","pdf",)
-        self.format_combo.setCurrentIndex(0)
+        self.format_combo.addItem("Markdown (.md)", "md")
+        self.format_combo.addItem("PDF (.pdf)", "pdf")
 
         self.topic_input = QLineEdit()
         self.topic_input.setPlaceholderText(
@@ -107,13 +107,6 @@ class MainWindow(QMainWindow):
             return
 
         file_format = self.format_combo.currentData()
-
-        if file_format == "pdf":
-            self.status_label.setText(
-                "Генерация PDF пока не реализована."
-            )
-            return
-
         provider = self.model_combo.currentData()
         language = self.language_combo.currentText()
         api_key = self.api_keys.get(provider)
@@ -123,6 +116,8 @@ class MainWindow(QMainWindow):
                 "Для выбранной модели не найден API-ключ."
             )
             return
+
+        self.current_format = file_format
 
         self.generate_button.setEnabled(False)
         self.status_label.setText(
@@ -160,10 +155,16 @@ class MainWindow(QMainWindow):
         topic = self.topic_input.text().strip()
 
         try:
-            file_path = save_markdown(
-                title=topic,
-                content=content,
-            )
+            if self.current_format == "pdf":
+                file_path = save_pdf(
+                    title=topic,
+                    content=content,
+                )
+            else:
+                file_path = save_markdown(
+                    title=topic,
+                    content=content,
+                )
 
         except Exception as exc:
             self._on_generation_error(
@@ -202,3 +203,5 @@ class MainWindow(QMainWindow):
 
         self.thread = None
         self.worker = None
+        self.current_format = None
+
